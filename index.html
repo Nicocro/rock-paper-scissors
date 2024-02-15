@@ -1,0 +1,52 @@
+<script> 
+
+function getComputerplayerSelection() {
+    const computerSelection = ['Rock', 'Paper', 'Scissors'];
+    const index = Math.floor(Math.random() * computerSelection.length);
+    return computerSelection[index];
+}
+
+function playRound(playerSelection, computerSelection) {
+    if (playerSelection === computerSelection) {
+    return 0;
+    } else if (
+    (playerSelection === 'Rock' && computerSelection === 'Scissors') ||
+    (playerSelection === 'Paper' && computerSelection === 'Rock') ||
+    (playerSelection === 'Scissors' && computerSelection === 'Paper')
+    ) {
+    return 1
+    } else {
+    return -1;
+    }
+}
+
+function playGame() {
+    let playerCount = 0;
+    let computerCount = 0;
+    for (let i=0; i<5; i++) {
+        const computerSelection = getComputerplayerSelection();
+        let roundResult = playRound(playerSelection, computerSelection) 
+        switch (roundResult) {
+            case 1 : 
+                playerCount += 1;
+                break;
+            case -1 : 
+                computerCount +=1;
+                break;
+        }
+    }
+    if (playerCount > computerCount) {
+        console.log(`You win! ${playerCount} vs ${computerCount}`)
+    } else if (playerCount == computerCount) {
+        console.log(`You Tie! ${playerCount} vs ${computerCount}`)
+    } else {
+        console.log(`you Lose! ${playerCount} vs ${computerCount}`)
+    }    
+}
+
+// current solution does not validate user inout, but that is ok
+let playerSelection = prompt("Choose between Rock, Paper or Scissors", "Rock");
+console.log(playGame());
+// console.log(playRound(playerSelection, computerSelection))
+
+</script>
