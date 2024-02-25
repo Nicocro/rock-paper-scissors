@@ -1,52 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>This is Rock Paper Scissors!</h1>
+    <div>
+        <button name="Rock">Rock</button>
+        <button name="Paper">Paper</button>
+        <button name="Scissors">Scissors</button>
+    </div>
+    <h2>Game Rounds counter</h2>
+    <p>A game is won once a player reaches 5 points</p>
+
+</body>
+
 <script> 
+    let computerScore = 0;
+    let playerScore = 0;
 
-function getComputerplayerSelection() {
-    const computerSelection = ['Rock', 'Paper', 'Scissors'];
-    const index = Math.floor(Math.random() * computerSelection.length);
-    return computerSelection[index];
-}
+   
+    
+    const buttons = document.querySelectorAll('button'); 
+    buttons.forEach(button => {
+        button.addEventListener('click', clickButton)
+    })
 
-function playRound(playerSelection, computerSelection) {
-    if (playerSelection === computerSelection) {
-    return 0;
-    } else if (
-    (playerSelection === 'Rock' && computerSelection === 'Scissors') ||
-    (playerSelection === 'Paper' && computerSelection === 'Rock') ||
-    (playerSelection === 'Scissors' && computerSelection === 'Paper')
-    ) {
-    return 1
-    } else {
-    return -1;
-    }
-}
+    function clickButton(event) {
+        // check if there is already a paragraph in the doc, and remove it
+        const existingScore = document.getElementById('score');
+        if (existingScore) {
+            existingScore.remove();
+        }
 
-function playGame() {
-    let playerCount = 0;
-    let computerCount = 0;
-    for (let i=0; i<5; i++) {
+        const existingWin = document.getElementById('win');
+        if (existingWin) {
+            existingWin.remove();
+        }
+
+        const existingLoss = document.getElementById('loss');
+        if (existingLoss) {
+            existingLoss.remove();
+        }
+
+        const clickedButton = event.target.name;
         const computerSelection = getComputerplayerSelection();
-        let roundResult = playRound(playerSelection, computerSelection) 
-        switch (roundResult) {
-            case 1 : 
-                playerCount += 1;
-                break;
-            case -1 : 
-                computerCount +=1;
-                break;
+        const roundResult = playRound(clickedButton, computerSelection)
+        if (roundResult == 'player') {playerScore++};
+        if (roundResult ==  'computer') {computerScore++};
+
+        if (computerScore == 5) {
+            const loss = document.createElement('p');
+            loss.id = "loss";
+            loss.textContent = 'you Loose!';
+            document.body.appendChild(loss);
+            computerScore = 0;
+            playerScore = 0;
+            return;
+        }
+
+        if (playerScore == 5) {
+            const win = document.createElement('p');
+            win.id = "win";
+            win.textContent = 'you Win!';
+            document.body.appendChild(win);
+            computerScore = 0;
+            playerScore = 0;
+            return;
+        }
+
+        console.log(`roundResult ${roundResult}`);
+        console.log(`playerScore ${playerScore}`);
+        console.log(`computerScore ${computerScore}`);
+
+        const p = document.createElement('p');
+        p.id = "score";
+        p.textContent = `Round result: ${roundResult}, Running score: Player ${playerScore} - Computer ${computerScore}`;
+        document.body.appendChild(p);
+    }
+
+    function getComputerplayerSelection() {
+        const computerSelection = ['Rock', 'Paper', 'Scissors'];
+        const index = Math.floor(Math.random() * computerSelection.length);
+        return computerSelection[index];
+    }
+    
+    function playRound(playerSelection, computerSelection) {
+        if (playerSelection === computerSelection) {
+        return 'tie';
+        } else if (
+        (playerSelection === 'Rock' && computerSelection === 'Scissors') ||
+        (playerSelection === 'Paper' && computerSelection === 'Rock') ||
+        (playerSelection === 'Scissors' && computerSelection === 'Paper')
+        ) {
+        return 'player';
+        } else {
+        return 'computer';
         }
     }
-    if (playerCount > computerCount) {
-        console.log(`You win! ${playerCount} vs ${computerCount}`)
-    } else if (playerCount == computerCount) {
-        console.log(`You Tie! ${playerCount} vs ${computerCount}`)
-    } else {
-        console.log(`you Lose! ${playerCount} vs ${computerCount}`)
-    }    
-}
+    
+    // function playGame() {
+    //     let playerCount = 0;
+    //     let computerCount = 0;
+    //     for (let i=0; i<5; i++) {
+    //         const computerSelection = getComputerplayerSelection();
+    //         let roundResult = playRound(playerSelection, computerSelection) 
+    //         switch (roundResult) {
+    //             case 1 : 
+    //                 playerCount += 1;
+    //                 break;
+    //             case -1 : 
+    //                 computerCount +=1;
+    //                 break;
+    //         }
+    //     }
+    //     if (playerCount > computerCount) {
+    //         console.log(`You win! ${playerCount} vs ${computerCount}`)
+    //     } else if (playerCount == computerCount) {
+    //         console.log(`You Tie! ${playerCount} vs ${computerCount}`)
+    //     } else {
+    //         console.log(`you Lose! ${playerCount} vs ${computerCount}`)
+    //     }    
+    // }
+    
+    // current solution does not validate user inout, but that is ok
+    //let playerSelection = prompt("Choose between Rock, Paper or Scissors", "Rock");
+    //console.log(playGame());
+    // console.log(playRound(playerSelection, computerSelection))
+    
+    </script>
 
-// current solution does not validate user inout, but that is ok
-let playerSelection = prompt("Choose between Rock, Paper or Scissors", "Rock");
-console.log(playGame());
-// console.log(playRound(playerSelection, computerSelection))
+</html>
 
-</script>
